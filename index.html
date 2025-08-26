@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>منظَّم — المواد</title>
+  <link rel="stylesheet" href="style.css"/>
+  <!-- ربط ملف manifest -->
+  <link rel="manifest" href="manifest.json">
+  <!-- لون الشريط العلوي في الهواتف -->
+  <meta name="theme-color" content="#5b2dd6"/>
+</head>
+<body>
+  <header class="app-bar">
+    <h1>منظَّم <span class="logo">📚</span></h1>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="ابحث عن مادة..." />
+      <button id="clearSearch" style="display:none">✕</button>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn" title="نسخ احتياطي">📥</button>
+      <button id="importBtn" title="استعادة">📤</button>
+      <input type="file" id="importInput" accept=".json" style="display:none"/>
+    </div>
+  </header>
+
+  <!-- الشاشة الرئيسية -->
+  <main id="home" class="screen active">
+    <section class="subjects" id="subjectsGrid"></section>
+    <button id="addSubjectBtn" class="fab fab-main">➕ إضافة مادة</button>
+  </main>
+
+  <!-- شاشة المادة -->
+  <main id="subject" class="screen">
+    <div class="subject-header">
+      <button id="backBtn" class="back" title="رجوع">↩</button>
+      <div class="subject-title">
+        <span id="subjectIcon" class="subject-emoji">📘</span>
+        <h2 id="subjectName">—</h2>
+        <span id="subjectMood" class="mood">😀</span>
+      </div>
+      <button id="editSubjectBtn" class="edit-btn" title="تعديل المادة">✏️</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="notes">📝 ملاحظات</button>
+      <button class="tab" data-tab="files">📂 ملفات</button>
+      <button class="tab" data-tab="images">🖼️ صور</button>
+      <button class="tab" data-tab="audio">🎵 صوتيات</button>
+    </div>
+
+    <!-- Notes -->
+    <section class="tab-body active" id="tab-notes" data-scope="notes">
+      <div class="empty" data-empty="notes">لا توجد ملاحظات</div>
+      <ul id="notesList" class="list"></ul>
+      <button class="fab fab-notes" data-add="note" title="إضافة ملاحظة">➕</button>
+    </section>
+
+    <!-- Files -->
+    <section class="tab-body" id="tab-files" data-scope="files">
+      <div class="empty" data-empty="files">لا توجد ملفات</div>
+      <div id="filesList" class="files-grid"></div>
+      <button class="fab fab-files" data-add="file" title="إضافة ملف">➕</button>
+    </section>
+
+    <!-- Images -->
+    <section class="tab-body" id="tab-images" data-scope="images">
+      <div class="empty" data-empty="images">لا توجد صور</div>
+      <div id="imagesList" class="images-grid"></div>
+      <button class="fab fab-images" data-add="image" title="إضافة صورة">➕</button>
+    </section>
+
+    <!-- Audio -->
+    <section class="tab-body" id="tab-audio" data-scope="audio">
+      <div class="empty" data-empty="audio">لا توجد صوتيات</div>
+      <div id="audioList" class="audio-grid"></div>
+      <button class="fab fab-audio" data-add="audio" title="إضافة صوتية">➕</button>
+    </section>
+
+    <div id="trashBar" class="trash-bar">
+      <span id="selectedCount">0 عنصر محدد</span>
+      <button id="trashBtn" class="trash">🗑️</button>
+      <button id="cancelSelect" class="cancel">إلغاء</button>
+    </div>
+  </main>
+
+  <!-- Modal لعرض الصورة بالحجم الكامل -->
+  <div id="imageModal" class="modal">
+    <img id="modalImage" src="" alt="full"/>
+  </div>
+
+  <!-- (الحوارات الأخرى مثل subjectDialog, noteDialog ... الخ تظل كما في النسخة الأصلية) -->
+
+  <script src="app.js"></script>
+
+  <!-- تسجيل Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then(reg => console.log("Service Worker مسجل:", reg.scope))
+          .catch(err => console.error("فشل تسجيل Service Worker:", err));
+      });
+    }
+  </script>
+</body>
+</html>
